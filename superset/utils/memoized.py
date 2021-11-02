@@ -20,6 +20,13 @@ from typing import Any, Callable
 
 
 def _memoized(seconds: int = 24 * 60 * 60, maxsize: int = 1024,) -> Callable[..., Any]:
+    """
+    A simple wrapper of functools.lru_cache, encapsulated for thread safety
+    :param seconds: LRU expired time, seconds
+    :param maxsize: LRU size
+    :return: a wrapped function by LRU
+    """
+
     def wrapper_cache(func: Callable[..., Any]) -> Callable[..., Any]:
         lru: Any = functools.lru_cache(maxsize=maxsize)(func)
         lru.lifetime = timedelta(seconds=seconds)
