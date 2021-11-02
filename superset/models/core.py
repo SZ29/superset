@@ -338,14 +338,17 @@ class Database(
         user_name: Optional[str] = None,
         source: Optional[utils.QuerySource] = None,
     ) -> Engine:
+        cache_key = (
+            f"{self.impersonate_user}"
+            f"{self.sqlalchemy_uri_decrypted}"
+            f"{json.dumps(self.get_extra())}"
+        )
         return self._get_sqla_engine(
             schema=schema,
             nullpool=nullpool,
             user_name=user_name,
             source=source,
-            impersonate_user=self.impersonate_user,
-            sqlalchemy_uri_decrypted=self.sqlalchemy_uri_decrypted,
-            extra=self.get_extra(),
+            residual_cache_key=cache_key,
         )
 
     @memoized
@@ -355,7 +358,7 @@ class Database(
         nullpool: bool = True,
         user_name: Optional[str] = None,
         source: Optional[utils.QuerySource] = None,
-        **kwargs: Any,
+        residual_cache_key: Optional[str] = None,
     ) -> Engine:
         extra = self.get_extra()
         sqlalchemy_url = make_url(self.sqlalchemy_uri_decrypted)
