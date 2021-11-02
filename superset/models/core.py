@@ -331,7 +331,11 @@ class Database(
                 effective_username = g.user.username
         return effective_username
 
-    @memoized(watch=("impersonate_user", "sqlalchemy_uri_decrypted", "extra"))
+    @cache_util.memoized_func(
+        key=lambda self, *args, **kwargs: f"{self.impersonate_user}"
+        f"{self.sqlalchemy_uri_decrypted}"
+        f"{self.extra}",
+    )
     def get_sqla_engine(
         self,
         schema: Optional[str] = None,
