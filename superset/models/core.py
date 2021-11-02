@@ -351,6 +351,7 @@ class Database(
             residual_cache_key=cache_key,
         )
 
+    # pylint: disable=too-many-arguments,unused-argument
     @memoized
     def _get_sqla_engine(
         self,
