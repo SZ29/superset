@@ -19,6 +19,8 @@ under the License.
 ## Change Log
 ### 1.4
 **Database Migrations**
+- [#17335](https://github.com/apache/superset/pull/17335) feat: Certify Charts and Dashboards (@geido)
+- [#17078](https://github.com/apache/superset/pull/17078) chore(engine): Translate fractional time grains—requires @superset-ui bump (@john-bodley)
 - [#16849](https://github.com/apache/superset/pull/16849) chore: db migrate timeseries_limit_metric to legacy_order_by (@zhaoyongjie)
 - [#14015](https://github.com/apache/superset/pull/14015) feat(filter-set): Add filterset resource (@ofekisr)
 - [#16454](https://github.com/apache/superset/pull/16454) feat: add certifiedby & certification details fields to the edit dataset columns fields (@pkdotson)
@@ -65,6 +67,13 @@ under the License.
 - [#16136](https://github.com/apache/superset/pull/16136) feat: add profiling to Superset pages (@betodealmeida)
 
 **Fixes**
+- [#17945](https://github.com/apache/superset/pull/17945) fix(dashboard): scope status of filter not update in dashboard metadata (@stephenLYZ)
+- [#17349](https://github.com/apache/superset/pull/17349) fix(Dashboard): Check validity of control item (@geido)
+- [#17842](https://github.com/apache/superset/pull/17842) fix(dashboard): update native filter info in metadata is not updated (@stephenLYZ)
+- [#17835](https://github.com/apache/superset/pull/17835) fix: resolve tests for 1.4 (@eschutho)
+- [#17781](https://github.com/apache/superset/pull/17781) fix(dashboard): commit update once (@serenajiang)
+- [#17766](https://github.com/apache/superset/pull/17766) fix: Remove positions from json_metadata (@geido)
+- [#17330](https://github.com/apache/superset/pull/17330) fix: import should accept old keys (@eschutho)
 - [#17570](https://github.com/apache/superset/pull/17570) fix: Save properties after applying changes in Dashboard (@geido)
 - [#17707](https://github.com/apache/superset/pull/17707) fix(Dashboard): Copy dashboard with duplicating charts 500 error (@geido)
 - [#16041](https://github.com/apache/superset/pull/16041) fix: set correct schema on config import (@betodealmeida)
@@ -224,6 +233,11 @@ under the License.
 - [#15762](https://github.com/apache/superset/pull/15762) fix: Align alert solid small svg center (@duynguyenhoang)
 
 **Others**
+- [#17964](https://github.com/apache/superset/pull/17964) chore: bump FAB to 3.4.3 (@dpgaspar)
+- [#17894](https://github.com/apache/superset/pull/17894) chore: bump gunicorn to 20.1.0 (@mporracindie)
+- [#17420](https://github.com/apache/superset/pull/17420) chore: Bump FAB to 3.4.0 (@kamalkeshavani-aiinside)
+- [#17752](https://github.com/apache/superset/pull/17752) chore: add release to pip requirements (@eschutho)
+- [#17724](https://github.com/apache/superset/pull/17724) ci: temp fix for mysqlclient on an OS regression bug (@dpgaspar)
 - [#17702](https://github.com/apache/superset/pull/17702) chore(sql): clean up invalid filter clause exception types (@villebro)
 - [#17579](https://github.com/apache/superset/pull/17579) chore(datasets): Sanitizing /save response (@craig-rueda)
 - [#17005](https://github.com/apache/superset/pull/17005) ci: skip unnecessary test steps (@villebro)
