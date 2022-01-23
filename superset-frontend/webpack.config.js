@@ -282,8 +282,14 @@ const config = {
     minimizer: [new CssMinimizerPlugin(), '...'],
   },
   resolve: {
-    modules: [APP_DIR, 'node_modules', ROOT_DIR],
-    alias: {},
+    // resolve modules from `/superset_frontend/node_modules` and `/superset_frontend`
+    modules: ['node_modules', APP_DIR],
+    alias: {
+      // TODO: remove aliases once React has been upgraded to v. 17 and
+      //  AntD version conflict has been resolved
+      antd: path.resolve(path.join(APP_DIR, './node_modules/antd')),
+      react: path.resolve(path.join(APP_DIR, './node_modules/react')),
+    },
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.yml'],
     fallback: {
       fs: false,
@@ -408,6 +414,10 @@ const config = {
         include: ROOT_DIR,
         loader: 'js-yaml-loader',
       },
+      {
+        test: /\.geojson$/,
+        type: 'asset/resource',
+      },
     ],
   },
   externals: {
@@ -420,24 +430,13 @@ const config = {
 };
 
 // find all the symlinked plugins and use their source code for imports
-Object.entries(packageConfig.dependencies).forEach(([pkg, version]) => {
-  const srcPath = `./node_modules/${pkg}/src`;
+Object.entries(packageConfig.dependencies).forEach(([pkg, relativeDir]) => {
+  const srcPath = path.join(APP_DIR, `./node_modules/${pkg}/src`);
+  const dir = relativeDir.replace('file:', '');
+
   if (/^@superset-ui/.test(pkg) && fs.existsSync(srcPath)) {
-    console.log(`[Superset Plugin] Use symlink source for ${pkg} @ ${version}`);
-    // only allow exact match so imports like `@superset-ui/plugin-name/lib`
-    // and `@superset-ui/plugin-name/esm` can still work.
-    const pkgDirectory = pkg.split('/').pop();
-    if (/^(core|chart-controls)/.test(pkgDirectory)) {
-      config.resolve.alias[pkg] = path.resolve(
-        APP_DIR,
-        `packages/superset-ui-${pkgDirectory}/src`,
-      );
-    } else {
-      config.resolve.alias[pkg] = path.resolve(
-        APP_DIR,
-        `plugins/${pkgDirectory}/src`,
-      );
-    }
+    console.log(`[Superset Plugin] Use symlink source for ${pkg} @ ${dir}`);
+    config.resolve.alias[pkg] = path.resolve(APP_DIR, `${dir}/src`);
   }
 });
 console.log(''); // pure cosmetic new line
