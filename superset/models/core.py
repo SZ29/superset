@@ -332,20 +332,35 @@ class Database(
                 effective_username = g.user.username
         return effective_username
 
-    @memoized(
-        watch=(
-            "impersonate_user",
-            "sqlalchemy_uri_decrypted",
-            "extra",
-            "encrypted_extra",
-        )
-    )
     def get_sqla_engine(
         self,
         schema: Optional[str] = None,
         nullpool: bool = True,
         user_name: Optional[str] = None,
         source: Optional[utils.QuerySource] = None,
+    ) -> Engine:
+        cache_key = (
+            f"{self.impersonate_user}"
+            f"{self.sqlalchemy_uri_decrypted}"
+            f"{json.dumps(self.get_extra())}"
+        )
+        return self._get_sqla_engine(
+            schema=schema,
+            nullpool=nullpool,
+            user_name=user_name,
+            source=source,
+            residual_cache_key=cache_key,
+        )
+
+    # pylint: disable=too-many-arguments,unused-argument
+    @memoized
+    def _get_sqla_engine(
+        self,
+        schema: Optional[str] = None,
+        nullpool: bool = True,
+        user_name: Optional[str] = None,
+        source: Optional[utils.QuerySource] = None,
+        residual_cache_key: Optional[str] = None,
     ) -> Engine:
         extra = self.get_extra()
         sqlalchemy_url = make_url(self.sqlalchemy_uri_decrypted)
